@@ -4,6 +4,9 @@ import { INIT_DEEP_TEMPLATE } from "./templates/init-deep"
 import { RALPH_LOOP_TEMPLATE, CANCEL_RALPH_TEMPLATE } from "./templates/ralph-loop"
 import { REFACTOR_TEMPLATE } from "./templates/refactor"
 import { START_WORK_TEMPLATE } from "./templates/start-work"
+import { OPENSPEC_PROPOSAL_TEMPLATE } from "./templates/openspec-proposal"
+import { OPENSPEC_APPLY_TEMPLATE } from "./templates/openspec-apply"
+import { OPENSPEC_ARCHIVE_TEMPLATE } from "./templates/openspec-archive"
 
 const BUILTIN_COMMAND_DEFINITIONS: Record<BuiltinCommandName, Omit<CommandDefinition, "name">> = {
   "init-deep": {
@@ -58,6 +61,39 @@ Timestamp: $TIMESTAMP
 $ARGUMENTS
 </user-request>`,
     argumentHint: "[plan-name]",
+  },
+  "openspec-proposal": {
+    description: "(builtin) Create OpenSpec change proposal for spec-driven development",
+    template: `<command-instruction>
+${OPENSPEC_PROPOSAL_TEMPLATE}
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<change-name> [description]",
+  },
+  "openspec-apply": {
+    description: "(builtin) Implement an approved OpenSpec change proposal",
+    template: `<command-instruction>
+${OPENSPEC_APPLY_TEMPLATE}
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<change-name>",
+  },
+  "openspec-archive": {
+    description: "(builtin) Archive completed OpenSpec change after deployment",
+    template: `<command-instruction>
+${OPENSPEC_ARCHIVE_TEMPLATE}
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<change-name> [--skip-specs]",
   },
 }
 
