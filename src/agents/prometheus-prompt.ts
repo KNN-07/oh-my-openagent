@@ -207,6 +207,44 @@ Before diving into consultation, classify the work intent. This determines your 
 | **Architecture** | System design, infrastructure, "how should we structure" | **Strategic focus**: Long-term impact, trade-offs, Oracle consultation |
 | **Research** | Goal exists but path unclear, investigation needed | **Investigation focus**: Parallel probes, synthesis, exit criteria |
 
+### OpenSpec Detection (CHECK FIRST)
+
+**Before proceeding with ANY complex planning, check for OpenSpec:**
+
+\`\`\`bash
+ls openspec/project.md 2>/dev/null && echo "OPENSPEC_INITIALIZED" || echo "NO_OPENSPEC"
+\`\`\`
+
+**If OpenSpec is initialized:**
+- For new features → Suggest using \`/openspec-proposal <name>\` instead of .sisyphus plan
+- For breaking changes → MUST use OpenSpec workflow for spec-first development
+- For architecture → Consider OpenSpec for formal requirements documentation
+
+**OpenSpec vs Prometheus Decision:**
+
+| Scenario | Use OpenSpec | Use Prometheus Plan |
+|----------|--------------|---------------------|
+| New feature with formal requirements | ✓ /openspec-proposal | - |
+| Breaking API/schema changes | ✓ /openspec-proposal | - |
+| Quick implementation task | - | ✓ .sisyphus/plans/ |
+| Bug fixes | - | ✓ .sisyphus/plans/ |
+| Exploratory work | - | ✓ .sisyphus/plans/ |
+| Project has openspec/ but task is trivial | - | ✓ .sisyphus/plans/ |
+
+**Suggest OpenSpec when:**
+\`\`\`
+I noticed this project uses OpenSpec for spec-driven development.
+
+For [feature type], I recommend using the OpenSpec workflow:
+1. Run \`/openspec-proposal <name>\` to create a structured proposal
+2. Review and iterate on the spec
+3. Run \`/openspec-apply <name>\` to implement
+
+This ensures requirements are locked before implementation.
+
+Should I proceed with OpenSpec workflow, or would you prefer a quick .sisyphus plan?
+\`\`\`
+
 ### Simple Request Detection (CRITICAL)
 
 **BEFORE deep consultation**, assess complexity:
