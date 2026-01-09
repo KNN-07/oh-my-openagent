@@ -1225,6 +1225,131 @@ POTENTIAL ACTIONS:
 - Bisect without proper good/bad boundaries -> Wasted time`,
 }
 
+const openspecSkill: BuiltinSkill = {
+  name: "openspec",
+  description:
+    "Spec-driven development workflow. MUST USE when: creating feature proposals, working with openspec/ directory, or when deterministic AI outputs are needed. Triggers: 'proposal', 'spec', 'openspec', 'SDD', 'requirements'.",
+  template: `# OpenSpec Skill
+
+Spec-driven development (SDD) for AI coding assistants. Ensures agreement on specifications *before* code is written.
+
+## Prerequisites
+
+Check if OpenSpec is initialized:
+\`\`\`bash
+ls openspec/project.md 2>/dev/null || echo "NOT_INITIALIZED"
+\`\`\`
+
+If NOT_INITIALIZED, suggest: \`npx @fission-ai/openspec init\`
+
+---
+
+## Three-Stage Workflow
+
+### Stage 1: Proposal (Draft Change)
+
+**Use**: /openspec-proposal <change-name>
+
+Create structured specifications before coding:
+\`\`\`
+openspec/changes/<change-name>/
+├── proposal.md      # Why, what, impact
+├── tasks.md         # Implementation checklist
+├── design.md        # Technical decisions (optional)
+└── specs/
+    └── <capability>/
+        └── spec.md  # Delta: ADDED/MODIFIED/REMOVED Requirements
+\`\`\`
+
+### Stage 2: Implementation (Apply Change)
+
+**Use**: /openspec-apply <change-name>
+
+After proposal approval:
+1. Read proposal.md, design.md, tasks.md
+2. Implement tasks sequentially
+3. Update task checkboxes in real-time
+4. Verify with lsp_diagnostics, build, tests
+
+### Stage 3: Archive (Update Source of Truth)
+
+**Use**: /openspec-archive <change-name>
+
+After deployment:
+- Merges change deltas into specs/
+- Archives change to changes/archive/
+
+---
+
+## Spec Format (CRITICAL)
+
+### Requirements
+\`\`\`markdown
+### Requirement: [Name]
+The system SHALL [normative statement].
+
+#### Scenario: [Name]
+- **WHEN** [condition]
+- **THEN** [expected outcome]
+\`\`\`
+
+### Delta Operations
+- \`## ADDED Requirements\` - New capabilities
+- \`## MODIFIED Requirements\` - Changed behavior (paste FULL content)
+- \`## REMOVED Requirements\` - Deprecated features
+- \`## RENAMED Requirements\` - Name changes
+
+---
+
+## CLI Commands
+
+\`\`\`bash
+openspec list              # Active changes
+openspec list --specs      # Existing capabilities
+openspec show <item>       # Display details
+openspec validate <id> --strict  # Validate before sharing
+openspec archive <id> --yes      # Archive after deployment
+\`\`\`
+
+---
+
+## Best Practices
+
+### When to Create Proposal
+- New features or capabilities
+- Breaking changes (API, schema)
+- Architecture changes
+- Performance optimizations that change behavior
+
+### Skip Proposal For
+- Bug fixes (restore intended behavior)
+- Typos, formatting, comments
+- Non-breaking dependency updates
+- Configuration changes
+- Tests for existing behavior
+
+### Naming Conventions
+- **Change IDs**: verb-led, kebab-case
+  - Good: \`add-two-factor-auth\`, \`update-login-flow\`, \`remove-deprecated-api\`
+  - Bad: \`two-factor-auth\`, \`tfa\`, \`feature-123\`
+
+### Validation Rules
+- Every requirement MUST have at least one \`#### Scenario:\`
+- Use \`###\` for requirements, \`####\` for scenarios
+- MODIFIED requirements include FULL content (not just changes)
+- Use SHALL/MUST for normative language
+
+---
+
+## Anti-Patterns
+
+- Starting implementation without approved proposal
+- Skipping validation before sharing proposal
+- Using MODIFIED without pasting full requirement content
+- Missing scenarios on requirements
+- Vague change IDs without action verbs`,
+}
+
 export function createBuiltinSkills(): BuiltinSkill[] {
-  return [playwrightSkill, frontendUiUxSkill, gitMasterSkill]
+  return [playwrightSkill, frontendUiUxSkill, gitMasterSkill, openspecSkill]
 }
