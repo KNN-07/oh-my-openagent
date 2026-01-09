@@ -10,20 +10,27 @@ let mockExistsSync: ((path: fs.PathLike) => boolean) | null = null
 let mockReadFileSync: ((path: fs.PathLike) => string) | null = null
 let mockReaddirSync: ((path: fs.PathLike) => fs.Dirent[]) | null = null
 
+const TEST_PROJECT_DIR = "/test/project"
+
 mock.module("node:fs", () => ({
   ...fs,
   existsSync: (path: fs.PathLike) => {
-    if (mockExistsSync) return mockExistsSync(path)
+    const pathStr = String(path)
+    if (mockExistsSync && pathStr.startsWith(TEST_PROJECT_DIR)) {
+      return mockExistsSync(path)
+    }
     return originalExistsSync(path)
   },
   readFileSync: (path: fs.PathLike, encoding?: BufferEncoding) => {
-    if (mockReadFileSync && typeof path === "string" && path.includes("openspec/")) {
+    const pathStr = String(path)
+    if (mockReadFileSync && pathStr.startsWith(TEST_PROJECT_DIR) && pathStr.includes("openspec/")) {
       return mockReadFileSync(path)
     }
     return originalReadFileSync(path, encoding as BufferEncoding)
   },
   readdirSync: (path: fs.PathLike, options?: any) => {
-    if (mockReaddirSync && typeof path === "string" && path.includes("openspec/")) {
+    const pathStr = String(path)
+    if (mockReaddirSync && pathStr.startsWith(TEST_PROJECT_DIR) && pathStr.includes("openspec/")) {
       return mockReaddirSync(path)
     }
     return originalReaddirSync(path, options)
@@ -33,7 +40,7 @@ mock.module("node:fs", () => ({
 import { createOpenSpecDetectorHook } from "./index"
 
 describe("openspec-detector hook", () => {
-  const mockProjectDir = "/test/project"
+  const mockProjectDir = TEST_PROJECT_DIR
 
   function createMockPluginInput(directory: string = mockProjectDir) {
     return {
