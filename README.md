@@ -801,6 +801,11 @@ When agents thrive, you thrive. But I want to help you directly too.
 - **Compaction Context Injector**: Preserves critical context (AGENTS.md, current directory info) during session compaction so you don't lose important state.
 - **Thinking Block Validator**: Validates thinking blocks to ensure proper formatting and prevent API errors from malformed thinking content.
 - **Claude Code Hooks**: Executes hooks from Claude Code's settings.json - this is the compatibility layer that runs PreToolUse/PostToolUse/UserPromptSubmit/Stop hooks.
+- **OpenSpec Integration**: Full support for [OpenSpec](https://github.com/Fission-AI/OpenSpec) spec-driven development workflow:
+  - Auto-detects OpenSpec projects and injects context on first file read
+  - Three slash commands: `/openspec-proposal`, `/openspec-apply`, `/openspec-archive`
+  - Prometheus planner integration suggests OpenSpec workflow for new features and breaking changes
+  - Disable with `disabled_hooks: ["openspec-detector"]` in config
 
 ## Configuration
 
@@ -1120,7 +1125,7 @@ Disable specific built-in hooks via `disabled_hooks` in `~/.config/opencode/oh-m
 }
 ```
 
-Available hooks: `todo-continuation-enforcer`, `context-window-monitor`, `session-recovery`, `session-notification`, `comment-checker`, `grep-output-truncator`, `tool-output-truncator`, `directory-agents-injector`, `directory-readme-injector`, `empty-task-response-detector`, `think-mode`, `anthropic-context-window-limit-recovery`, `rules-injector`, `background-notification`, `auto-update-checker`, `startup-toast`, `keyword-detector`, `agent-usage-reminder`, `non-interactive-env`, `interactive-bash-session`, `empty-message-sanitizer`, `compaction-context-injector`, `thinking-block-validator`, `claude-code-hooks`, `ralph-loop`, `preemptive-compaction`
+Available hooks: `todo-continuation-enforcer`, `context-window-monitor`, `session-recovery`, `session-notification`, `comment-checker`, `grep-output-truncator`, `tool-output-truncator`, `directory-agents-injector`, `directory-readme-injector`, `empty-task-response-detector`, `think-mode`, `anthropic-context-window-limit-recovery`, `rules-injector`, `background-notification`, `auto-update-checker`, `startup-toast`, `keyword-detector`, `agent-usage-reminder`, `non-interactive-env`, `interactive-bash-session`, `empty-message-sanitizer`, `compaction-context-injector`, `thinking-block-validator`, `claude-code-hooks`, `ralph-loop`, `preemptive-compaction`, `openspec-detector`
 
 **Note on `auto-update-checker` and `startup-toast`**: The `startup-toast` hook is a sub-feature of `auto-update-checker`. To disable only the startup toast notification while keeping update checking enabled, add `"startup-toast"` to `disabled_hooks`. To disable all update checking features (including the toast), add `"auto-update-checker"` to `disabled_hooks`.
 
@@ -1164,6 +1169,26 @@ Add LSP servers via the `lsp` option in `~/.config/opencode/oh-my-opencode.json`
 ```
 
 Each server supports: `command`, `extensions`, `priority`, `env`, `initialization`, `disabled`.
+
+### OpenSpec
+
+Configure [OpenSpec](https://github.com/Fission-AI/OpenSpec) integration behavior:
+
+```json
+{
+  "openspec": {
+    "inject_context": true,
+    "suggest_workflow": true
+  }
+}
+```
+
+| Option             | Default | Description                                                                                |
+| ------------------ | ------- | ------------------------------------------------------------------------------------------ |
+| `inject_context`   | `true`  | Inject OpenSpec context on first file read per session                                     |
+| `suggest_workflow` | `true`  | Suggest OpenSpec workflow (`/openspec-proposal`, etc.) for feature requests                |
+
+**Disabling**: To completely disable OpenSpec detection, add `"openspec-detector"` to `disabled_hooks`.
 
 ### Experimental
 
