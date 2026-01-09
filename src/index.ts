@@ -31,6 +31,7 @@ import {
   createStartWorkHook,
   createSisyphusOrchestratorHook,
   createPrometheusMdOnlyHook,
+  createOpenSpecDetectorHook,
 } from "./hooks";
 import {
   contextCollector,
@@ -216,6 +217,13 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
 
   const prometheusMdOnly = isHookEnabled("prometheus-md-only")
     ? createPrometheusMdOnlyHook(ctx)
+    : null;
+
+  const openspecDetector = isHookEnabled("openspec-detector")
+    ? createOpenSpecDetectorHook(ctx, {
+        injectContext: pluginConfig.openspec?.inject_context ?? true,
+        suggestWorkflow: pluginConfig.openspec?.suggest_workflow ?? true,
+      })
     : null;
 
   const taskResumeInfo = createTaskResumeInfoHook();
@@ -557,6 +565,7 @@ await editErrorRecovery?.["tool.execute.after"](input, output);
         await sisyphusTaskRetry?.["tool.execute.after"](input, output);
         await sisyphusOrchestrator?.["tool.execute.after"]?.(input, output);
       await taskResumeInfo["tool.execute.after"](input, output);
+      await openspecDetector?.["tool.execute.after"]?.(input, output);
     },
   };
 };

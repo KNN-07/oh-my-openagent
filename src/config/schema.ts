@@ -33,6 +33,7 @@ export const BuiltinSkillNameSchema = z.enum([
   "playwright",
   "frontend-ui-ux",
   "git-master",
+  "openspec",
 ])
 
 export const OverridableAgentNameSchema = z.enum([
@@ -88,6 +89,7 @@ export const HookNameSchema = z.enum([
   "prometheus-md-only",
   "start-work",
   "sisyphus-orchestrator",
+  "openspec-detector",
 ])
 
 export const BuiltinCommandNameSchema = z.enum([
@@ -302,6 +304,13 @@ export const GitMasterConfigSchema = z.object({
   include_co_authored_by: z.boolean().default(true),
 })
 
+export const OpenSpecConfigSchema = z.object({
+  /** Inject OpenSpec context on first file read per session (default: true) */
+  inject_context: z.boolean().default(true),
+  /** Suggest OpenSpec workflow for feature requests (default: true) */
+  suggest_workflow: z.boolean().default(true),
+})
+
 export const OhMyOpenCodeConfigSchema = z.object({
   $schema: z.string().optional(),
   disabled_mcps: z.array(AnyMcpNameSchema).optional(),
@@ -321,6 +330,7 @@ export const OhMyOpenCodeConfigSchema = z.object({
   background_task: BackgroundTaskConfigSchema.optional(),
   notification: NotificationConfigSchema.optional(),
   git_master: GitMasterConfigSchema.optional(),
+  openspec: OpenSpecConfigSchema.optional(),
 })
 
 export type OhMyOpenCodeConfig = z.infer<typeof OhMyOpenCodeConfigSchema>
@@ -343,5 +353,6 @@ export type CategoryConfig = z.infer<typeof CategoryConfigSchema>
 export type CategoriesConfig = z.infer<typeof CategoriesConfigSchema>
 export type BuiltinCategoryName = z.infer<typeof BuiltinCategoryNameSchema>
 export type GitMasterConfig = z.infer<typeof GitMasterConfigSchema>
+export type OpenSpecConfig = z.infer<typeof OpenSpecConfigSchema>
 
 export { AnyMcpNameSchema, type AnyMcpName, McpNameSchema, type McpName } from "../mcp/types"

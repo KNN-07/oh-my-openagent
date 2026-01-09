@@ -40,7 +40,8 @@
         "enum": [
           "playwright",
           "frontend-ui-ux",
-          "git-master"
+          "git-master",
+          "openspec"
         ]
       }
     },
@@ -79,7 +80,8 @@
           "edit-error-recovery",
           "prometheus-md-only",
           "start-work",
-          "sisyphus-orchestrator"
+          "sisyphus-orchestrator",
+          "openspec-detector"
         ]
       }
     },
@@ -2424,6 +2426,19 @@
           "type": "boolean"
         },
         "include_co_authored_by": {
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "openspec": {
+      "type": "object",
+      "properties": {
+        "inject_context": {
+          "default": true,
+          "type": "boolean"
+        },
+        "suggest_workflow": {
           "default": true,
           "type": "boolean"
         }
