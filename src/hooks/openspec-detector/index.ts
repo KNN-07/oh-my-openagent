@@ -84,12 +84,21 @@ function formatOpenSpecContext(state: OpenSpecState, projectDir: string): string
   }
 
   lines.push("")
-  lines.push("**Workflow Reminder:**")
-  lines.push("- For new features: Use `/openspec-proposal <name>` to create structured proposal")
-  lines.push("- To implement: Use `/openspec-apply <name>` after proposal approval")
-  lines.push("- After deployment: Use `/openspec-archive <name>` to update specs")
+  lines.push("**OpenSpec Workflow (AGENT INSTRUCTIONS):**")
   lines.push("")
-  lines.push("Run `openspec list` to see active changes, `openspec list --specs` for capabilities.")
+  lines.push("When user requests work that matches these scenarios, ASK FOR CONFIRMATION then invoke the workflow directly:")
+  lines.push("")
+  lines.push("| Scenario | Action |")
+  lines.push("|----------|--------|")
+  lines.push("| New feature, breaking change, formal requirements | Ask: \"This looks like a feature request. Should I create an OpenSpec proposal?\" → If yes, call `slashcommand(command=\"openspec-proposal\")` and follow the returned instructions |")
+  lines.push("| Implementing an existing proposal | Ask: \"Should I implement the OpenSpec proposal `<name>`?\" → If yes, call `slashcommand(command=\"openspec-apply\")` and follow the returned instructions |")
+  lines.push("| After deployment/completion of a change | Ask: \"Should I archive this OpenSpec change?\" → If yes, call `slashcommand(command=\"openspec-archive\")` and follow the returned instructions |")
+  lines.push("")
+  lines.push("**Commands for context:**")
+  lines.push("- `openspec list` - See active changes")
+  lines.push("- `openspec list --specs` - See existing capabilities")
+  lines.push("")
+  lines.push("**IMPORTANT**: Do NOT just suggest the user type slash commands. Instead, ask for confirmation and invoke the workflow yourself via `slashcommand` tool.")
 
   // Include AGENTS.md content if available
   if (state.agentsPath) {

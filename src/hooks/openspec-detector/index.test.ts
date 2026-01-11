@@ -326,11 +326,14 @@ describe("openspec-detector hook", () => {
       const result = await hook["tool.execute.after"](input, output)
 
       // #then
-      expect(result?.output).toContain("/openspec-proposal")
-      expect(result?.output).toContain("/openspec-apply")
-      expect(result?.output).toContain("/openspec-archive")
+      expect(result?.output).toContain("openspec-proposal")
+      expect(result?.output).toContain("openspec-apply")
+      expect(result?.output).toContain("openspec-archive")
       expect(result?.output).toContain("openspec list")
       expect(result?.output).toContain("</openspec-context>")
+      expect(result?.output).toContain("ASK FOR CONFIRMATION")
+      expect(result?.output).toContain("slashcommand")
+      expect(result?.output).toContain("Do NOT just suggest the user type slash commands")
     })
   })
 
